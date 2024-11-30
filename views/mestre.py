@@ -471,7 +471,7 @@ def showMestre():
     # User-provided prompt
     if prompt := st.chat_input(disabled=not replicate_api):
         st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.chat_message("user", avatar="./src/img/usuario.JPG"):
+        with st.chat_message("user", avatar="./src/img/usuario.jpg"):
             st.write(prompt)
 
 
