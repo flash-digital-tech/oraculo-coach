@@ -1,0 +1,18 @@
+cookie:
+  expiry_days: 30
+  key: my_signature_key
+  name: my_cookie_name
+credentials:
+  users:
+  - bairro: Eldorado
+    cep: '32315020'
+    cidade: Contagem
+    cpf_cnpj: 05940359612
+    created_at: '2024-01-17T00:00:00'
+    email: william@gmail.com
+    endereco: Rua Jose Barra do Nascimento
+    name: William Eustaquio
+    password: oraculosia
+    role: admin
+    username: william
+    whatsapp: '31996011180'
