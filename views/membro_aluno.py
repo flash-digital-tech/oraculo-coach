@@ -427,10 +427,10 @@ def showMembroAluno():
         prompt_str = "\n".join(prompt)
 
         if get_num_tokens(prompt_str) >= 500:  # padrão3072
-        st.error(
-            "Poxa, você já atingiu seu limite de demostração, mas pode ficar tranquilo. Clique no link abaixo para "
-            "pedir seu acesso completo e não ter mais interrupções.")
-        st.markdown("[PEDIR ACESSO](https://buy.stripe.com/test_aEU4k3c2R0TWeBy4gn)")
+            st.error(
+                "Poxa, você já atingiu seu limite de demostração, mas pode ficar tranquilo. Clique no link abaixo para "
+                "pedir seu acesso completo e não ter mais interrupções.")
+            st.markdown("[PEDIR ACESSO](https://buy.stripe.com/test_aEU4k3c2R0TWeBy4gn)")
 
         
         if is_health_question(prompt_str):
