@@ -42,8 +42,6 @@ if replicate_api is None:
     st.warning('Um token de API é necessário para determinados recursos.', icon='⚠️')
 
 
-#######################################################################################################################
-
 def showMembroAluno():
 
     is_in_registration = False
@@ -125,6 +123,30 @@ def showMembroAluno():
     # Exemplo de uso da função
     pasta_conhecimento = './conhecimento'  # Caminho da pasta onde os arquivos .txt estão localizados
     conteudos_txt = ler_arquivos_txt(pasta_conhecimento)
+
+    is_in_registration = False
+    is_in_scheduling = False
+
+
+    # Função para verificar se a pergunta está relacionada a cadastro
+    def is_health_question(prompt):
+        keywords = ["cadastrar", "inscrição", "quero me cadastrar", "gostaria de me registrar",
+                    "desejo me cadastrar", "quero fazer o cadastro", "quero me registrar", "quero me increver",
+                    "desejo me registrar", "desejo me inscrever","eu quero me cadastrar", "eu desejo me cadastrar",
+                    "eu desejo me registrar", "eu desejo me inscrever", "eu quero me registrar", "eu desejo me registrar",
+                    "eu quero me inscrever"]
+        return any(keyword.lower() in prompt.lower() for keyword in keywords)
+
+    #Função que analisa desejo de agendar uma reunião
+    def is_schedule_meeting_question(prompt):
+        keywords = [
+            "agendar reunião", "quero agendar uma reunião", "gostaria de agendar uma reunião",
+            "desejo agendar uma reunião", "quero marcar uma reunião", "gostaria de marcar uma reunião",
+            "desejo marcar uma reunião", "posso agendar uma reunião", "posso marcar uma reunião",
+            "Eu gostaria de agendar uma reuniao", "eu quero agendar", "eu quero agendar uma reunião,",
+            "quero reunião"
+        ]
+        return any(keyword.lower() in prompt.lower() for keyword in keywords)
 
     # Atualizando o system_prompt
     system_prompt = f'''
@@ -229,7 +251,7 @@ def showMembroAluno():
     Sessão única (1 a 1,5 hora): R$ 450,00
     Pacote de 10 sessões: R$ 4.000,00
     Programa intensivo (2 a 3 meses): R$ 5.500,00
-    
+    Mande este link para ter a sessão: https://buy.stripe.com/test_7sI03N4ApcCEgJG14c
     
     4. Treinamentos para Equipes de Alta Performance
     
@@ -404,7 +426,21 @@ def showMembroAluno():
         prompt.append("")
         prompt_str = "\n".join(prompt)
 
+        if get_num_tokens(prompt_str) >= 500:  # padrão3072
+        st.error(
+            "Poxa, você já atingiu seu limite de demostração, mas pode ficar tranquilo. Clique no link abaixo para "
+            "pedir seu acesso completo e não ter mais interrupções.")
+        st.markdown("[PEDIR ACESSO](https://buy.stripe.com/test_aEU4k3c2R0TWeBy4gn)")
 
+        
+        if is_health_question(prompt_str):
+            cadastrar_cliente()
+
+
+        if is_schedule_meeting_question(prompt_str):
+            agendar_reuniao()
+
+        
         for event in replicate.stream(
                 "meta/meta-llama-3.1-405b-instruct",
                 input={
