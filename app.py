@@ -107,28 +107,28 @@ if 'authentication_status' in st.session_state and st.session_state['authenticat
         user_role = next((user['role'] for user in config['credentials']['users'] if user['username'] == st.session_state['username']), None)
         if user_role:
             with st.spinner('Acessando...'):
-                time.sleep(2)  # Simula uma operação demorada
+                time.sleep(1)  # Simula uma operação demorada
 
         if user_role is None:
             with st.spinner('Saindo...'):
-                time.sleep(1)  # Simula uma operação demorada
+                time.sleep(2)  # Simula uma operação demorada
     else:
         st.error("Usuário não está autenticado.")
         st.stop()
 
     permissao_usuario = {
-        "admin": ["Home", "ALAN COACH", "Membro/Aluno", "Cadastrar Cliente","Criar Parceiro", "Financeiro", "Link de Pagamento", \
+        "admin": ["ALAN COACH", "Apresentação", "Aluno", "Cadastrar Cliente","Criar Parceiro", "Financeiro", "Link de Pagamento", \
                   "Webhook","Assinaturas","Split de Pagamentos",],
-        "parceiro": ["Home", "ALAN COACH", "Membro/Aluno", "Cadastrar Cliente","Assinaturas", "Link de Pagamento"],
-        "cliente": ["Home", "ALAN COACH"],
+        "parceiro": ["ALAN COACH", "Apresentação", "Aluno", "Cadastrar Cliente","Assinaturas", "Link de Pagamento"],
+        "cliente": ["ALAN COACH", "Apresentação"],
     }
 
     paginas_permitidas = permissao_usuario.get(user_role, [])
 
     pages = {
-        "Home": showHome,
         "ALAN COACH": showMestre,
-        "Membro/Aluno": showMembroAluno,
+        "Apresentação": showHome,
+        "Aluno": showMembroAluno,
         "Cadastrar Cliente": showCliente,
         "Criar Parceiro": showParceiro,
         "Assinaturas": showAssinatura,
