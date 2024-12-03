@@ -331,16 +331,16 @@ def agendar_reuniao():
 
     st.title('Agendar Reunião')
     with st.form("cadastro_reuniao"):
-        name = st.text_input("Nome")
-        whatsapp = st.text_input("WhatsApp")
-        whatsapp = st.text_input("E-mail")
-        endereco = st.text_input("Endereço")
-        message = st.text_area("Envie sua mensagem")
+        name = st.text_input("Nome:")
+        whatsapp = st.text_input("WhatsApp:")
+        email = st.text_input("E-mail:")
+        endereco = st.text_input("Endereço:")
+        message = st.text_area("Mensagem:")
         submit_button = st.form_submit_button("ENVIAR")
 
     if submit_button:
         if not WEBHOOK_URL:
-            st.error("Email service is not set up. Please try again later.", icon="📧")
+            st.error("O Webhook deverá ser configurado", icon="📧")
             st.stop()
 
         if not name:
@@ -351,19 +351,23 @@ def agendar_reuniao():
             st.error("Digite seu WhatsApp.", icon="📨")
             st.stop()
 
+        if not email:
+            st.error("Digite seu e-mail.", icon="📨")
+            st.stop()
+
         if not endereco:
             st.error("Digite seu endereço com o nome do bairro.", icon="📨")
             st.stop()
 
         if not message:
-            st.error("Deixe sua observação caso tenha.", icon="💬")
+            st.error("Deixe sua mensagem.", icon="💬")
             st.stop()
 
         # Prepare the data payload and send it to the specified webhook URL
-        data = {"Nome": name, "WhatsApp": whatsapp, "Endereço": endereco}
+        data = {"Nome": name, "WhatsApp": whatsapp, "Email": email, "Endereço": endereco, "Mensagem": message}
         response = requests.post(WEBHOOK_URL, json=data)
 
         if response.status_code == 200:
-            st.success("A sua mensagem foi enviada com sucesso! 🎉", icon="🚀")
+            st.success("A sua mensagem foi enviada, o Alan entrará em contato! 🎉", icon="🚀")
         else:
             st.error("Desculpe-me, parece que houve um problema no envio da sua mensagem", icon="😨")
