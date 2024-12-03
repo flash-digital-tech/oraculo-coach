@@ -2,7 +2,7 @@ import streamlit as st
 from streamlit_lottie import st_lottie
 import requests
 import json
-from forms.contact import cadastrar_cliente  # Importando a função de cadastro
+from forms.contact import agendar_reuniao  # Importando a função de cadastro
 
 
 def showHome():
@@ -123,12 +123,12 @@ def showHome():
     # --- BOTÃO DE INSCRIÇÃO ---
     if st.button("✉️ INSCREVA-SE AGORA"):
         # Chama a função de cadastro que contém o modal
-        nome, whatsapp, endereco = cadastrar_cliente()  # Modifique a função para retornar os valores
+        nome, whatsapp, email, endereco, message = agendar_reuniao()  # Modifique a função para retornar os valores
 
         # Verifica se os campos foram preenchidos
-        if nome and whatsapp and endereco:
+        if nome and whatsapp and email and endereco and message:
             # Se todos os campos foram preenchidos, exibe a mensagem de sucesso
-            st.success("Cadastro feito com sucesso!!!")
+            st.success("A sua mensagem foi enviada com sucesso! 🎉", icon="🚀")
         else:
             # Se algum campo estiver vazio, exibe uma mensagem de erro
-            st.error("Por favor, preencha todos os campos antes de confirmar o cadastro.")
+            st.error("Por favor, preencha todos os campos antes de confirmar o agendamento.")
