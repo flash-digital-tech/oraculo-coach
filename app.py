@@ -120,7 +120,7 @@ if 'authentication_status' in st.session_state and st.session_state['authenticat
         "admin": ["ALAN COACH", "Apresentação", "Aluno", "Cadastrar Cliente","Criar Parceiro", "Financeiro", "Link de Pagamento", \
                   "Webhook","Assinaturas","Split de Pagamentos",],
         "parceiro": ["ALAN COACH", "Apresentação", "Aluno", "Cadastrar Cliente","Assinaturas", "Link de Pagamento"],
-        "cliente": ["ALAN COACH", "Apresentação"],
+        "cliente": ["Aluno", "Apresentação"],
     }
 
     paginas_permitidas = permissao_usuario.get(user_role, [])
