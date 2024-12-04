@@ -44,6 +44,9 @@ if replicate_api is None:
 
 def showMembroAluno():
 
+    if "image" not in st.session_state:
+        st.session_state.image = None
+    
     def ler_arquivos_txt(pasta):
         """
         Lê todos os arquivos .txt na pasta especificada e retorna uma lista com o conteúdo de cada arquivo.
