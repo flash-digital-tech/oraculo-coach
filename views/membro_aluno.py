@@ -468,8 +468,26 @@ def showMembroAluno():
     
         # Exibir a imagem de perfil no chat
         with st.chat_message("user"):
-            st.image(avatar, width=50)  # Ajuste a largura conforme necessário
+            # Verifica se a imagem é uma upload ou uma string de caminho
+            if isinstance(avatar, str):
+                st.image(avatar, width=50)  # Se for uma string, assume que é o caminho da imagem
+            else:
+                # Se for um arquivo de imagem, usa o método de exibição do Streamlit
+                st.image(avatar, use_column_width=True)  # Ajuste a largura conforme necessário
+            
             st.write(prompt)
+    
+    # Ao exibir mensagens anteriores, certifique-se de que as imagens sejam consistentes
+    for message in st.session_state.messages:
+        if message["role"] == "user":
+            if st.session_state.image is not None:
+                avatar = st.session_state.image
+            else:
+                avatar = "./src/img/usuario.jpg"  # Imagem padrão do sistema
+    
+            with st.chat_message("user"):
+                st.image(avatar, width=50)
+                st.write(message["content"])
 
     # Generate a new response if last message is not from assistant
     if st.session_state.messages[-1]["role"] != "assistant":
