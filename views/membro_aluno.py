@@ -459,7 +459,14 @@ def showMembroAluno():
     # User-provided prompt
     if prompt := st.chat_input(disabled=not replicate_api):
         st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.chat_message("user", avatar="./src/img/usuario.JPG"):
+        
+        # Verifica se o usuário fez upload de uma imagem
+        if st.session_state.image is not None:
+            avatar = st.session_state.image  # Usa a imagem carregada
+        else:
+            avatar = "./src/img/usuario.jpg"  # Imagem padrão do sistema
+    
+        with st.chat_message("user", avatar=avatar):
             st.write(prompt)
 
     # Generate a new response if last message is not from assistant
