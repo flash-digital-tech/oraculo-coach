@@ -232,10 +232,7 @@ def showMembroAluno():
     
     '''
     
-    if st.session_state.image is not None:
-        avatar = st.session_state.image
-    # Set assistant icon to Snowflake logo
-    icons = {"assistant": "./src/img/perfil-alan.jpg", "user": avatar}
+    icons = {"assistant": "./src/img/perfil-alan.jpg", "user": "./src/img/usuario.jpg"}
 
 
     st.markdown(
@@ -408,24 +405,26 @@ def showMembroAluno():
             yield str(event)
 
 
+    # Caminho para a imagem padrão
+    default_avatar_path = "./src/img/usuario.jpg"
+    
+    def get_avatar_image():
+        """Retorna a imagem do usuário ou a imagem padrão se não houver imagem cadastrada."""
+        if st.session_state.image is not None:
+            return st.session_state.image  # Retorna a imagem cadastrada
+        else:
+            return default_avatar_path  # Retorna a imagem padrão
+    
     # User-provided prompt
     if prompt := st.chat_input(disabled=not replicate_api):
         st.session_state.messages.append({"role": "user", "content": prompt})
         
-        # Verifica se o usuário fez upload de uma imagem
-        if st.session_state.image is not None:
-            avatar = st.session_state.image  # Usa a imagem carregada
-        else:
-            avatar = "./src/img/usuario.jpg"  # Imagem padrão do sistema
-    
-        # Exibir a imagem de perfil no chat
-        with st.chat_message("user"):
-            # Verifica se a imagem é uma upload ou uma string de caminho
-            if isinstance(avatar, str):
-                st.image(avatar, width=50)  # Se for uma string, assume que é o caminho da imagem
-            
+        # Chama a função para obter a imagem correta
+        avatar_image = get_avatar_image()
+        
+        with st.chat_message("user", avatar=avatar_image):
             st.write(prompt)
-
+    
     # Generate a new response if last message is not from assistant
     if st.session_state.messages[-1]["role"] != "assistant":
         with st.chat_message("assistant", avatar="./src/img/perfil-alan.jpg"):
