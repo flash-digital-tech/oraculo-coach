@@ -466,7 +466,9 @@ def showMembroAluno():
         else:
             avatar = "./src/img/usuario.jpg"  # Imagem padrão do sistema
     
-        with st.chat_message("user", avatar=avatar):
+        # Exibir a imagem de perfil no chat
+        with st.chat_message("user"):
+            st.image(avatar, width=50)  # Ajuste a largura conforme necessário
             st.write(prompt)
 
     # Generate a new response if last message is not from assistant
