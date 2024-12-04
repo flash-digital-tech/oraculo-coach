@@ -234,8 +234,6 @@ def showMembroAluno():
     programas completos, se for para oferecer resultados muito personalizados e comprovados.
     
     '''
-    
-    icons = {"assistant": "./src/img/perfil-alan.jpg", "user": "./src/img/usuario.jpg"}
 
 
     st.markdown(
@@ -315,9 +313,24 @@ def showMembroAluno():
         st.session_state.messages = [{
             "role": "assistant", "content": '🌟 Bem-vindo ao Alan Coach! Estou aqui para te guiar na jornada de autodescoberta e transformação, rumo à sua melhor versão. Vamos juntos! 💪✨'}]
 
-    # Display or clear chat messages
+    # Dicionário de ícones
+    icons = {
+        "assistant": "./src/img/perfil-alan.jpg",  # Ícone padrão do assistente
+        "user": "./src/img/usuario.jpg"            # Ícone padrão do usuário
+    }
+    
+    # Caminho para a imagem padrão
+    default_avatar_path = "./src/img/usuario.jpg"
+    
+    # Exibição das mensagens
     for message in st.session_state.messages:
-        with st.chat_message(message["role"], avatar=icons[message["role"]]):
+        if message["role"] == "user":
+            # Verifica se a imagem do usuário existe
+            avatar_image = st.session_state.image if "image" in st.session_state and st.session_state.image else default_avatar_path
+        else:
+            avatar_image = icons["assistant"]  # Ícone padrão do assistente
+    
+        with st.chat_message(message["role"], avatar=avatar_image):
             st.write(message["content"])
 
 
@@ -407,9 +420,6 @@ def showMembroAluno():
         ):
             yield str(event)
 
-
-    # Caminho para a imagem padrão
-    default_avatar_path = "./src/img/usuario.jpg"
     
     def get_avatar_image():
         """Retorna a imagem do usuário ou a imagem padrão se não houver imagem cadastrada."""
