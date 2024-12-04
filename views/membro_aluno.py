@@ -44,56 +44,6 @@ if replicate_api is None:
 
 def showMembroAluno():
 
-    is_in_registration = False
-    is_in_scheduling = False
-
-    # Função para verificar se a pergunta está relacionada a cadastro
-    def is_health_question(prompt):
-        keywords = ["cadastrar", "inscrição", "quero me cadastrar", "gostaria de me registrar",
-                    "desejo me cadastrar", "quero fazer o cadastro", "quero me registrar", "quero me increver",
-                    "desejo me registrar", "desejo me inscrever","eu quero me cadastrar", "eu desejo me cadastrar",
-                    "eu desejo me registrar", "eu desejo me inscrever", "eu quero me registrar", "eu desejo me registrar",
-                    "eu quero me inscrever"]
-        return any(keyword.lower() in prompt.lower() for keyword in keywords)
-
-    #Função que analisa desejo de agendar uma reunião
-    def is_schedule_meeting_question(prompt):
-        keywords = [
-            "agendar reunião", "quero agendar uma reunião", "gostaria de agendar uma reunião",
-            "desejo agendar uma reunião", "quero marcar uma reunião", "gostaria de marcar uma reunião",
-            "desejo marcar uma reunião", "posso agendar uma reunião", "posso marcar uma reunião",
-            "Eu gostaria de agendar uma reuniao", "eu quero agendar", "eu quero agendar uma reunião,",
-            "quero reunião"
-        ]
-        return any(keyword.lower() in prompt.lower() for keyword in keywords)
-
-    def obter_primeiro_nome():
-        """Retorna o primeiro nome do aluno se disponível, caso contrário retorna 'Aluno'."""
-        if 'name' in st.session_state and st.session_state.name:
-            return st.session_state.name.split()[0]  # Retorna o primeiro nome
-        else:
-            return "Aluno"  # Retorna 'Aluno' se não houver nome
-
-    # Carregar apenas a aba "Dados" do arquivo Excel
-    #df_dados = pd.read_excel('./conhecimento/medicos_dados_e_links.xlsx', sheet_name='Dados')
-
-    # Converter o DataFrame para um arquivo de texto, por exemplo, CSV
-    #df_dados.to_csv('./conhecimento/medicos_dados_e_links.txt', sep=' ', index=False, header=True)
-
-    # Se preferir usar tabulações como delimitador, substitua sep=' ' por sep='\t'
-    # df_dados.to_csv('./conhecimento/CatalogoMed_Sudeste_Dados.txt', sep='\t', index=False, header=True)
-
-    # Especifica o caminho para o arquivo .txt
-    #caminho_arquivo = './conhecimento/medicos_dados_e_links.txt'
-
-    # Abre o arquivo no modo de leitura ('r')
-    #with open(caminho_arquivo, 'r', encoding='utf-8') as arquivo:
-        # Lê todo o conteúdo do arquivo e armazena na variável conteudo
-        #info = arquivo.read()
-
-    # Exibe o conteúdo do arquivo
-    #df_txt = info
-
     def ler_arquivos_txt(pasta):
         """
         Lê todos os arquivos .txt na pasta especificada e retorna uma lista com o conteúdo de cada arquivo.
@@ -156,20 +106,21 @@ def showMembroAluno():
 
     Sempre priorize uma comunicação acolhedora, com termos acessíveis que facilitem a compreensão, mas que ao mesmo tempo 
     reflitam a profundidade e o profissionalismo que essas áreas exigem. Suas respostas devem ser voltadas para auxiliar as pessoas a:
-    Resgatar sua autoestima e confiança.
-    Superar bloqueios emocionais como traumas, ansiedade, depressão e sentimento de culpa.
-    Adotar práticas de autocompaixão, autocuidado e autorresponsabilidade.
-    Encontrar equilíbrio emocional e clareza mental para tomar decisões congruentes com seus valores e objetivos.
-    Ressignificar experiências negativas para que tragam aprendizado e crescimento.
-    Você responderá somente perguntas relacionadas a coach, se o usuário insitir responda que foi programado para responder somente 
-    sobre os serviços prestados pelo Alan Coach.
-    Responda somente as perguntas sem acrescentar conteúdos ou sair fora do contexto da pergunta.
-    Nos seus encontros de mentoria, trabalhará para:
-
+    Resgatar sua autoestima e confiança. Superar bloqueios emocionais como traumas, ansiedade, depressão e sentimento de culpa.
+    Adotar práticas de autocompaixão, autocuidado e autorresponsabilidade. Encontrar equilíbrio emocional e clareza mental para tomar decisões congruentes com seus valores e objetivos.
+    Ressignificar experiências negativas para que tragam aprendizado e crescimento. Você responderá somente perguntas relacionadas a 
+    coach, se o usuário insitir responda que foi programado para responder somente sobre os serviços prestados pelo Alan Coach.
+    Responda somente as perguntas sem acrescentar conteúdos ou sair fora do contexto da pergunta. Se o usuário insitir em fazer perguntas
+    fora do contexto ou assuntos que saiam fora das especialidades citadas, peça desculpas e diga que foi programado para responder somente
+    perguntas relacionadas ao universo do desenvolvimento pessoal, ressignificação emocional, congruência, autoconhecimento, 
+    inteligência emocional, e superação de traumas. 
+    
+    Nos seus encontros de mentoria, você trabalhará para:
     Trazer clareza: Ajudar você a entender onde está e para onde quer ir.
     Fortalecer sua confiança: Mostrando que o próximo passo está ao seu alcance.
     Transformar planos em ação: Sem complicações, com foco no que realmente importa.
-    Meu objetivo é simples: te ajudar a conquistar seus sonhos e a se sentir no controle da sua vida, seja nos investimentos, nos negócios ou na sua própria evolução pessoal.
+    Meu objetivo é simples: te ajudar a conquistar seus sonhos e a se sentir no controle da sua vida, seja nos investimentos, nos 
+    negócios ou na sua própria evolução pessoal.
     
      **Cadastro e Agendamento:**
        - Se o usuário estiver com o status de cadastro {is_in_registration} ou agendamento {is_in_scheduling}, 
@@ -474,18 +425,6 @@ def showMembroAluno():
                 st.image(avatar, width=50)  # Se for uma string, assume que é o caminho da imagem
             
             st.write(prompt)
-    
-    # Ao exibir mensagens anteriores, certifique-se de que as imagens sejam consistentes
-    for message in st.session_state.messages:
-        if message["role"] == "user":
-            if st.session_state.image is not None:
-                avatar = st.session_state.image
-            else:
-                avatar = "./src/img/usuario.jpg"  # Imagem padrão do sistema
-    
-            with st.chat_message("user"):
-                st.image(avatar, width=50)
-                st.write(message["content"])
 
     # Generate a new response if last message is not from assistant
     if st.session_state.messages[-1]["role"] != "assistant":
