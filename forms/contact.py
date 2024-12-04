@@ -2,6 +2,7 @@ import streamlit as st
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, EmailStr
 import pandas as pd
+from PIL import Image
 import os
 import stripe
 from typing import Optional
@@ -181,12 +182,29 @@ def cadastrar_cliente():
             whatsapp = st.text_input(label="WhatsApp", placeholder='Exemplo: 31900001111', value=st.session_state.whatsapp)
 
         with col3:
-            endereco = st.text_input("Endereço", value=st.session_state.endereco)
-            bairro = st.text_input("Bairro", value=st.session_state.bairro)
-            password = st.text_input("Digite uma senha:", type="password", value=st.session_state.password)
+            endereco = st.text_input("Endereço", value=st.session_state.get("endereco", ""))
+            bairro = st.text_input("Bairro", value=st.session_state.get("bairro", ""))
+            password = st.text_input("Digite uma senha:", type="password", value=st.session_state.get("password", ""))
             uploaded_file = st.file_uploader("Escolha uma imagem de perfil", type=["jpg", "jpeg", "png"])
+        
             if uploaded_file is not None:
                 st.session_state.image = uploaded_file  # Armazena o arquivo de imagem no session_state
+        
+                # Salva a imagem com o nome de usuário
+                username = st.session_state.username  # Certifique-se de que o username está previamente definido
+                if username:
+                    directory = "./src/img/cliente"
+                    if not os.path.exists(directory):
+                        os.makedirs(directory)
+        
+                    # Salva a imagem no formato desejado
+                    image_path = os.path.join(directory, f"{username}.png")  # ou .jpg, conforme necessário
+                    image = Image.open(uploaded_file)
+                    image.save(image_path)
+        
+                    st.success(f"Imagem salva em: {image_path}")
+                else:
+                    st.warning("Por favor, insira um nome de usuário antes de fazer o upload da imagem.")
 
         with col4:
             cep = st.text_input("CEP", value=st.session_state.cep)
