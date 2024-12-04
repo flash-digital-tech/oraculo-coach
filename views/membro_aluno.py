@@ -280,10 +280,11 @@ def showMembroAluno():
     programas completos, se for para oferecer resultados muito personalizados e comprovados.
     
     '''
-
-
+    
+    if st.session_state.image is not None:
+        avatar = st.session_state.image
     # Set assistant icon to Snowflake logo
-    icons = {"assistant": "./src/img/perfil-alan.jpg", "user": "./src/img/usuario.jpg"}
+    icons = {"assistant": "./src/img/perfil-alan.jpg", "user": avatar}
 
 
     st.markdown(
@@ -471,9 +472,6 @@ def showMembroAluno():
             # Verifica se a imagem é uma upload ou uma string de caminho
             if isinstance(avatar, str):
                 st.image(avatar, width=50)  # Se for uma string, assume que é o caminho da imagem
-            else:
-                # Se for um arquivo de imagem, usa o método de exibição do Streamlit
-                st.image(avatar, use_column_width=True)  # Ajuste a largura conforme necessário
             
             st.write(prompt)
     
