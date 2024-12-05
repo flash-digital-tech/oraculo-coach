@@ -136,7 +136,7 @@ async def handle_create_customer(cliente):
 
 @st.dialog("Cadastro")
 # Streamlit Interface
-def showCliente():
+def cadastrar_cliente():
     st.title("Sistema Flash Pagamentos")
 
     # Seção para criar um novo cliente
