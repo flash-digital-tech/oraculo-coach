@@ -135,7 +135,8 @@ async def handle_create_customer(cliente):
 
 
 @st.dialog("Cadastro")
-def cadastrar_cliente():
+# Streamlit Interface
+def showCliente():
     st.title("Sistema Flash Pagamentos")
 
     # Seção para criar um novo cliente
@@ -182,29 +183,29 @@ def cadastrar_cliente():
             whatsapp = st.text_input(label="WhatsApp", placeholder='Exemplo: 31900001111', value=st.session_state.whatsapp)
 
         with col3:
-            endereco = st.text_input("Endereço", value=st.session_state.get("endereco", ""))
-            bairro = st.text_input("Bairro", value=st.session_state.get("bairro", ""))
-            password = st.text_input("Digite uma senha:", type="password", value=st.session_state.get("password", ""))
-            uploaded_file = st.file_uploader("Escolha uma imagem de perfil", type=["jpg", "jpeg", "png"])
-        
+            endereco = st.text_input("Endereço", value=st.session_state.endereco)
+            bairro = st.text_input("Bairro", value=st.session_state.bairro)
+            password = st.text_input("Digite uma senha:", type="password", value=st.session_state.password)
+            uploaded_file = st.file_uploader("escolha uma imagem de perfil", type=["jpg", "jpeg", "png"])
+
             if uploaded_file is not None:
-                st.session_state.image = uploaded_file  # Armazena o arquivo de imagem no session_state
-        
-                # Salva a imagem com o nome de usuário
-                username = st.session_state.username  # Certifique-se de que o username está previamente definido
+                st.session_state.image = uploaded_file  # armazena o arquivo de imagem no session_state
+
+                # salva a imagem com o nome de usuário
+                username = st.session_state.username  # certifique-se de que o username está previamente definido
                 if username:
                     directory = "./src/img/cliente"
                     if not os.path.exists(directory):
                         os.makedirs(directory)
-        
-                    # Salva a imagem no formato desejado
+
+                    # salva a imagem no formato desejado
                     image_path = os.path.join(directory, f"{username}.png")  # ou .jpg, conforme necessário
-                    image = Image.open(uploaded_file)
+                    image = Image.open(uploaded_file)  # Corrigido de 'image' para 'Image'
                     image.save(image_path)
-        
-                    st.success(f"Imagem salva em: {image_path}")
+
+                    st.success(f"imagem salva em: {image_path}")
                 else:
-                    st.warning("Por favor, insira um nome de usuário antes de fazer o upload da imagem.")
+                    st.warning("por favor, insira um nome de usuário antes de fazer o upload da imagem.")
 
         with col4:
             cep = st.text_input("CEP", value=st.session_state.cep)
@@ -297,6 +298,32 @@ def cadastrar_cliente():
         except Exception as e:
             # Aqui você pode registrar o erro em um log ou apenas ignorá-lo
             pass  # Não exibe o erro na tela
+
+    # Seção para listar clientes
+    st.header("Listar Clientes")
+    offset = st.number_input("Offset", min_value=0, value=0)
+    limit = st.number_input("Limite", min_value=1, max_value=100, value=10)
+    name_filter = st.text_input("Filtrar por name (opcional)")
+    email_filter = st.text_input("Filtrar por E-mail (opcional)")
+
+    if st.button("Carregar Lista de Clientes"):
+        try:
+            asyncio.create_task(handle_fetch_customers(offset, limit, name_filter, email_filter))
+            if clientes:
+                data = []
+                for cliente in clientes:
+                    data.append({
+                        'ID': cliente.id,
+                        'name': cliente.name,
+                        'E-mail': cliente.email,
+                    })
+                df = pd.DataFrame(data)
+                st.dataframe(df)  # Exibe a tabela de clientes no Streamlit
+            else:
+                st.warning("Nenhum cliente encontrado.")
+        except Exception as e:
+            # Aqui também você pode registrar o erro ou ignorá-lo
+            pass
 
 
 def is_valid_email(email):
